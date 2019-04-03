@@ -2,7 +2,7 @@ import requests
 class API(object):
 	def __init__(self):
 		self.products_list =[]
-		self.variables_list = ["_id", "nutrition_grades", "product_name", "url", "stores"]
+		self.variables_list = ["_id", "nutrition_grades", "product_name", "url", "stores", "nutrition-score-fr"]
 		self.stores_list = ["Carrefour", "Carrefour Market", "Carrefour Planet",
 		 "Carrefour Express", "Carrefour GB", "Colruyt", "Spa",
 		 "Delhaize", "Delhaize City","Proxy Delhaize", "AD Delhaize", "Shop'n Go",
@@ -51,7 +51,7 @@ class API(object):
 		for store in stores:
 			if store == "":
 				return ""
-			elif store in (self.stores_list or self.title(self.stores_list)):
+			elif store in (self.stores_list + self.title(self.stores_list)):
 				verified_stores.append(store)
 		if len(verified_stores) >= 1: 
 			return verified_stores
@@ -75,11 +75,11 @@ class API(object):
 				self.products_list.append(variables_of_a_product)
 
 openfoodfact = API()
-openfoodfact.get_request_product("boissons énergisantes", "d")
+openfoodfact.get_request_product("fromages", "c")
 openfoodfact.find_informations()
 for produit in openfoodfact.products_list:
 	print(produit)
-print(len(openfoodfact.products))
+print(len(openfoodfact.products_list))
 
 
 
