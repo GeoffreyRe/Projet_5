@@ -5,7 +5,7 @@ class Check(object):
 		 "Carrefour Express", "Carrefour GB", "Colruyt", "Spa",
 		 "Delhaize", "Delhaize City","Proxy Delhaize", "AD Delhaize", "Shop'n Go",
 		 "Albert Heijn", "Intermarché", "Cora", "Match", "Smatch" , "Louis Delhaize",
-		 "Aldi", "Lidl", "Magasins U", "Super U", "Hyper U" "Auchan", "Noz", "Casino",
+		 "Aldi", "Lidl", "Magasins U", "Super U", "Hyper U", "Auchan", "Noz", "Casino",
 		 "Leclerc", "Géant", "Dia", "Edeka", "Magasins diététiques"]
 
 	def capital_letter(self, str_list):
