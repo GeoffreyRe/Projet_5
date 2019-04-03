@@ -8,11 +8,15 @@ class API(object):
 		 "Delhaize", "Delhaize City","Proxy Delhaize", "AD Delhaize", "Shop'n Go",
 		 "Albert Heijn", "Intermarché", "Cora", "Match", "Smatch" , "Louis Delhaize",
 		 "Aldi", "Lidl", "Magasins U", "Super U", "Hyper U" "Auchan", "Noz", "Casino",
-		 "Leclerc", "Géant", "Dia", "Edeka" ]
+		 "Leclerc", "Géant", "Dia", "Edeka", "Magasins diététiques"]
 
-	def get_request_product(self,http_link):
+	def get_request_product(self,categorie ,nutriscore):
+		http_link = ("https://be-fr.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&"
+		"tagtype_0=categories&tag_contains_0=contains&tag_0={}&tagtype_1=nutrition_grades&tag_contains_1=contains"
+		"&tag_1={}&sort_by=unique_scans_n&page_size=150&json=1")
+		print(http_link.format(categorie,nutriscore))
 		try:
-			request = requests.get(http_link)
+			request = requests.get(http_link.format(categorie,nutriscore))
 		except:
 			self.products = {}
 			return self.products
@@ -71,10 +75,12 @@ class API(object):
 				self.products_list.append(variables_of_a_product)
 
 openfoodfact = API()
-openfoodfact.get_request_product("https://be-fr.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&tagtype_0=categories&tag_contains_0=contains&tag_0=cereales-pour-petit-dejeuner&sort_by=unique_scans_n&page_size=100&json=1")
+openfoodfact.get_request_product("boissons énergisantes", "d")
 openfoodfact.find_informations()
 for produit in openfoodfact.products_list:
 	print(produit)
+print(len(openfoodfact.products))
+
 
 
 
