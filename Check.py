@@ -1,4 +1,4 @@
-class Check(object):
+class ProductClassifier(object):
 	""" Class that will verify values from Openfoodfacts API"""
 	def __init__(self):
 		#self.api= openfoodfact.API()

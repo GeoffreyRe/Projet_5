@@ -6,7 +6,7 @@ class API(object):
 		self.products_list =[]
 		self.variables_list = ["_id", "nutrition_grades", "product_name", "url", "stores", "brands", "nutriments"]
 		self.variables_list_2 = [0,0,0,0,0,0,"nutrition-score-fr"]
-		self.checker = Check.Check()
+		self.checker = Check.ProductClassifier()
 
 	def get_request_product(self,categorie ,nutriscore):
 		http_link = ("https://be-fr.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&"
@@ -57,7 +57,8 @@ if __name__ == "__main__":
 			a +=1
 
 	print(a)
-	print(len(openfoodfact.products_list))
+	for a in openfoodfact.products_list:
+		print(a)
 
 
 
