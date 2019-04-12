@@ -1,12 +1,12 @@
 
 import requests
-import Check 
+import ProductClassifier as productC
 class API(object):
 	def __init__(self):
 		self.products_list =[]
 		self.variables_list = ["_id", "nutrition_grades", "product_name", "url", "stores", "brands", "nutriments"]
 		self.variables_list_2 = [0,0,0,0,0,0,"nutrition-score-fr"]
-		self.checker = Check.ProductClassifier()
+		self.checker = productC.ProductClassifier()
 
 	def get_request_product(self,categorie ,nutriscore):
 		http_link = ("https://be-fr.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&"
