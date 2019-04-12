@@ -10,11 +10,11 @@ class BDD_ini(object):
 
 
 
-		
+
 """
-db = records.Database("mysql+mysqlconnector://{}:{}@localhost".format("root","Geof4589"))
+db = records.Database("mysql+mysqlconnector://{}:{}@localhost".format("root","mdp"))
 with db.transaction() as conn:
-    conn.query("CREATE USER  IF NOT EXISTS 'student'@'localhost' IDENTIFIED BY 'Geof4589'")
+    conn.query("CREATE USER  IF NOT EXISTS 'student'@'localhost' IDENTIFIED BY 'mdp'")
     warnings = conn.query("SHOW WARNINGS").all(as_dict=True)
 print(warnings)
 
