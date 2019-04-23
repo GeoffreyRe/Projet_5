@@ -8,12 +8,12 @@ class API(object):
 		self.variables_list_2 = [0,0,0,0,0,0,"nutrition-score-fr"]
 		self.checker = productC.ProductClassifier()
 
-	def get_request_product(self,categorie ,nutriscore):
+	def get_request_product(self,categorie):
 		http_link = ("https://be-fr.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&"
-		"tagtype_0=categories&tag_contains_0=contains&tag_0={}&tagtype_1=nutrition_grades&tag_contains_1=contains"
-		"&tag_1={}&sort_by=unique_scans_n&page_size=200&json=1")
+		"tagtype_0=categories&tag_contains_0=contains&tag_0={}"
+		"&sort_by=unique_scans_n&page_size=200&json=1")
 		try:
-			request = requests.get(http_link.format(categorie,nutriscore))
+			request = requests.get(http_link.format(categorie))
 		except:
 			self.products = {}
 			return self.products
@@ -35,8 +35,8 @@ class API(object):
 
 		return str(dictionary_value)
 
-	def find_informations(self,categorie, nutriscore):
-		self.get_request_product(categorie,nutriscore) 
+	def find_informations(self,categorie):
+		self.get_request_product(categorie) 
 		for product in self.products:
 			variables_of_a_product = []
 			for i, variable_name in enumerate(self.variables_list):
@@ -48,17 +48,23 @@ class API(object):
 	def use_the_checker(self):
 		self.products_list = self.checker.complete_check(self.products_list)
 
+	def reset_products_list(self):
+		self.products_list = []
+
 if __name__ == "__main__": 
 	openfoodfact = API()
-	openfoodfact.find_informations("Aliments d'origine végétale", "a")
+	openfoodfact.find_informations("Laits", "a")
+	print(openfoodfact.products_list)
+	openfoodfact.reset_products_list()
+	openfoodfact.find_informations("Beurres", "d")
+	print(openfoodfact.products_list)
 	a = 0
 	for produit in openfoodfact.products_list:
 		if "" in produit:
 			a +=1
 
 	print(a)
-	for a in openfoodfact.products_list:
-		print(a)
+	
 
 
 

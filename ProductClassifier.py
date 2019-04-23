@@ -2,13 +2,13 @@ class ProductClassifier(object):
 	""" Class that will verify values from Openfoodfacts API"""
 	def __init__(self):
 		#self.api= openfoodfact.API()
-		self.variables_list = self.variables_list = ["_id", "nutrition_grades", "product_name", "url", "stores", "brands", "nutriments"]
-		self.stores_list = ["carrefour", "carrefour market", "carrefour planet",
-		 "carrefour express", "carrefour GB", "colruyt", "spa",
-		 "delhaize", "delhaize city","proxy delhaize", "aD delhaize", "shop'n go",
-		 "albert heijn", "intermarché", "cora", "match", "smatch" , "louis delhaize",
-		 "aldi", "lidl", "magasins U", "super U", "hyper U", "auchan", "noz", "casino",
-		 "leclerc", "géant", "dia", "edeka", "magasins diététiques"]
+		self.variables_list = ["_id", "nutrition_grades", "product_name", "url", "stores", "brands", "nutriments"]
+		self.stores_list = ["Carrefour", "Carrefour Market", "Carrefour Planet",
+		 "Carrefour Express", "Carrefour GB", "Colruyt", "Spa",
+		 "Delhaize", "Delhaize City","Proxy Delhaize", "AD Delhaize", "Shop\'n Go",
+		 "Albert Heijn", "Intermarché", "Cora", "Match", "Smatch" , "Louis Delhaize",
+		 "Aldi", "Lidl", "Magasins U", "Super U", "Hyper U", "Auchan", "Noz", "Casino",
+		 "Leclerc", "Géant", "Dia", "Edeka", "magasins diététiques"]
 
 	def capital_letter(self, str_list):
 		""" method that put capital letter at 
@@ -33,7 +33,7 @@ class ProductClassifier(object):
 		for store in stores:
 			if store == "":
 				return ""
-			elif store in (self.stores_list + self.capital_letter(self.stores_list)):
+			elif store in self.stores_list:
 				verified_stores.append(store)
 		if len(verified_stores) >= 1: 
 			return verified_stores
@@ -55,6 +55,10 @@ class ProductClassifier(object):
 			brands_list = brands.split(",")
 			return brands_list[0].strip()
 		return brands
+
+	def echap_single_string(self, value):
+		pass
+
 			
 
 	def complete_check(self,list_products):

@@ -1,0 +1,6 @@
+{
+    "User": "User you want to use",
+    "Initialisation" : 1,
+    "Pw": "password of your user",
+    "Database": "the database where you created tables"
+}
