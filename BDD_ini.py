@@ -134,8 +134,3 @@ class BDD_ini(object):
 if __name__ == "__main__":
 	bdd = BDD_ini()
 	bdd.complete_fill()
-
-
-
-		
-
