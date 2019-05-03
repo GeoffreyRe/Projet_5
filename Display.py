@@ -20,14 +20,32 @@ class Display(object):
 		self.bdd = database.BDD()
 
 	def menu(self):
-		index, intern_index, name = 0, 0, 0
+		index, intern_index, name, intern_index_2 = 0, 0, 0, 0
 		index_list = [0,1,2]
 		functions_list = [self.first_menu, self.category_menu,self.sub_cat_menu,self.products_menu,self.substituate_menu]
 		launched = True
 		while launched:
-			parameters_list = [[index],[index],[index, intern_index], [index, name],[]]
+			parameters_list = [[index],[index],[index, intern_index], [index, name, intern_index],[]]
 			index, intern_index,name = functions_list[index](*parameters_list[index])
 			os.system("cls")
+
+	def validate_answer_int(self, product_list):
+		validate = False
+		while not validate:
+			answer = input("Quel choix voulez-vous ?")
+			try:
+				answer = int(answer)
+			except:
+				print("Ce n'est pas un chiffre")
+				continue
+			if 0 <= answer <= len(product_list):
+				validate = True
+			else:
+				print("Ce chiffre ne correspond à aucun choix")
+
+
+		return (answer - 1)  
+
 
 	def make_choice(self, liste):
 		for i, element in enumerate(liste):
@@ -61,10 +79,11 @@ class Display(object):
 		else:
 			index += 1
 
-		return index, answer, name
+		return index, intern_index, name
+
 	def create_tablib(self, products_list,headers_list):
 		data, data.headers = tablib.Dataset(),headers_list	
-		keys_list,index = list(products_list[0].keys()), 1
+		keys_list,index = ["product_name", "brand", "nutrition_score"], 1
 		for dictionnary in products_list:
 			value_to_append = []
 			for key in keys_list:
@@ -73,29 +92,100 @@ class Display(object):
 			index += 1
 			data.append(value_to_append)
 		print(data)
-		return data.dict
+		answer = int(input("Plus d'info sur un produit: "))
+		return (answer - 1)
 
-	def make_choice_product(self,products_list):
+		
+
+	def display_informations_product(self, product):
+		tuple_keys_list = [("barcode","Code barre produit"),("product_name", "Nom du produit"),
+							("brand","Marque"), ("nutrition_grade", "Grade nutritionnel"),
+							("nutrition_score", "Score nutritionnel"), ("stores", "Magasins"),
+							("url", "Url") ]
+		for key, value in tuple_keys_list:
+			print(value, "=", product[key])
+		answer = input("Validez votre choix: ")
+		return answer, (product["barcode"], product["nutrition_score"])
+
+	def product(self, index, name, products_list):
+		if products_list == 0:
+			products_list = self.bdd.find_products(name)
+		headers_list = ["Touche", "Nom produit", "Marque", "Score"]
 		while True:
-			answer = int(input("Quel produit choisisez-vous?: "))
-			if 0 <= answer <= len(products_list):
-				break
-			else:
-				print("Ce n'est pas un chiffre valide, recommencez svp") 
-		product = products_list[answer - 1]
-		return (product["code barre"], product ["Score"])
+			os.system("cls")
+			answer = self.create_tablib(products_list, headers_list)
+			if answer == -1:
+				return False, index, products_list, 0
+			sub_answer, value_product = self.display_informations_product(products_list[answer])
+			if sub_answer == "O":
+				index += 1
+				return True, index, products_list, value_product
+			continue
 
 
-	def products_menu(self, index, name):
-		list_products = self.bdd.find_products(name)
-		columns_list = ["touche", "code barre", "Nom du produit"
-						, "Marque","url", "Score"]
-		tablib_list_product = self.create_tablib(list_products,columns_list)
-		product = self.make_choice_product(tablib_list_product)
-		list_substitute = self.bdd.find_products(name, product[1])
-		tablib_list_substitute = self.create_tablib(list_substitute,columns_list)
-		substitute = self.make_choice_product(tablib_list_substitute)
-		return 0,0,0
+	def recording_into_user(self, value_product, value_substitute):
+		answer = input("Voulez-vous enregistrer votre choix ?: ")
+		if answer == "O":
+			self.bdd.record_table_user()
+			print("votre enregistrement a bien été effectué")
+		else:
+			print("pas de soucis")
+		input()
+
+
+				
+	def substitute(self, index, name, products_list, value):
+		substitute_list = self.bdd.find_products(name, value[1])
+		headers_list = ["Touche", "Nom produit", "Marque", "Score"]
+		while True:
+			os.system("cls")
+			answer = self.create_tablib(substitute_list, headers_list)
+			if answer == -1:
+				index -= 1
+				return True , index, products_list, 0
+			sub_answer, value_substitute = self.display_informations_product(substitute_list[answer])
+			if sub_answer == "O":
+				self.recording_into_user(value, value_substitute)
+				return False, index, products_list, value
+			continue
+		
+		
+
+	def products_menu(self, index, name, index_2):
+		intern_index, products_list, value = 0, 0, 0
+		functions_list = [self.product, self.substitute]
+		launched = True
+		while launched:
+			parameters_list = [[intern_index, name, products_list],
+								[intern_index, name, products_list, value]]
+			launched, intern_index, products_list, value = functions_list[intern_index](*parameters_list[intern_index])
+		index -= 1
+		return index,index_2,0
+
+
+
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		
 	def substituate_menu(self):
 		print(self.bdd.find_substitute())

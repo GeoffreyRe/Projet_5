@@ -27,19 +27,21 @@ class BDD(object):
 	def find_products(self, sub_category, nutrition_score = False):
 		query_id_sub_cat = "SELECT id FROM Sub_category WHERE name = {}".format("'" + sub_category + "'")
 		id_sub_cat = self.database.query(query_id_sub_cat).all(as_dict = True)[0]["id"]
+		sub_query = "SELECT GROUP_CONCAT(name SEPARATOR ', ') FROM Assoc_product_store INNER JOIN Store ON Store.id = Assoc_product_store.id_store where barcode_product = barcode"
 		if nutrition_score == False:
-			query = "SELECT barcode, product_name, brand, url, nutrition_score FROM Product WHERE id_sub_category = {}\
-					ORDER BY RAND() LIMIT 10".format(id_sub_cat)
+			query = "SELECT barcode, product_name, brand, nutrition_score, url, nutrition_grade, ({}) as stores FROM Product WHERE id_sub_category = {} ORDER BY RAND() LIMIT 10".format(sub_query, id_sub_cat)
 		else:
-			query = "SELECT barcode, product_name, brand, url, nutrition_score FROM Product WHERE id_sub_category = {}\
-					 AND nutrition_score < {} ORDER BY RAND() LIMIT 10".format(id_sub_cat, nutrition_score)
+			query = "SELECT barcode, product_name, brand, url, nutrition_score, nutrition_grade, ({}) as stores FROM Product WHERE id_sub_category = {}\
+					 AND nutrition_score < {} ORDER BY RAND() LIMIT 10".format(sub_query, id_sub_cat, nutrition_score)
 		products_list = self.database.query(query)
 		products_list = products_list.all(as_dict = True)
+		# pour retrouver les magasins : SELECT barcode_product, id_store, name, GROUP_CONCAT(name SEPARATOR ', ')
+		# FROM Assoc_product_store INNER JOIN Store ON Store.id = Assoc_product_store.id_store where barcode_product = '7613035449596';
 		return products_list
 
 
 
 if __name__ == "__main__":
 	bdd = BDD()
-	bdd.find_products("laits")
+	print(bdd.find_products("snacks sucrés", 12))
 		
