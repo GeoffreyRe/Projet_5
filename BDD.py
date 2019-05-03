@@ -31,12 +31,12 @@ class BDD(object):
 		if nutrition_score == False:
 			query = "SELECT barcode, product_name, brand, nutrition_score, url, nutrition_grade, ({}) as stores FROM Product WHERE id_sub_category = {} ORDER BY RAND() LIMIT 10".format(sub_query, id_sub_cat)
 		else:
+			print("On est au bon endroit")
+			input()
 			query = "SELECT barcode, product_name, brand, url, nutrition_score, nutrition_grade, ({}) as stores FROM Product WHERE id_sub_category = {}\
 					 AND nutrition_score < {} ORDER BY RAND() LIMIT 10".format(sub_query, id_sub_cat, nutrition_score)
 		products_list = self.database.query(query)
 		products_list = products_list.all(as_dict = True)
-		# pour retrouver les magasins : SELECT barcode_product, id_store, name, GROUP_CONCAT(name SEPARATOR ', ')
-		# FROM Assoc_product_store INNER JOIN Store ON Store.id = Assoc_product_store.id_store where barcode_product = '7613035449596';
 		return products_list
 
 

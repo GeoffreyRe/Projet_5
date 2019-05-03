@@ -29,10 +29,12 @@ class Display(object):
 			index, intern_index,name = functions_list[index](*parameters_list[index])
 			os.system("cls")
 
-	def validate_answer_int(self, product_list):
+	def validate_answer_int(self, product_list, sentence = 0):
 		validate = False
+		sentences = ["Quel choix voulez-vous ?: ", 
+		"Sur quel produit voulez-vous plus d'information ?: "]
 		while not validate:
-			answer = input("Quel choix voulez-vous ?")
+			answer = input(sentences[sentence])
 			try:
 				answer = int(answer)
 			except:
@@ -42,16 +44,24 @@ class Display(object):
 				validate = True
 			else:
 				print("Ce chiffre ne correspond à aucun choix")
+		return (answer - 1) 
 
-
-		return (answer - 1)  
+	def validate_answer_yes_no(self):
+		while True:
+			answer = input("Voulez-vous valider votre choix ? (O/N): ")
+			if answer == "O":
+				return True
+			elif answer == "N":
+				return False
+			else:
+				print("Ce n'est pas une réponse valide\n"+
+				"les seuls réponses possibles étant 'O' (=Oui) ou 'N' (='Non')") 
 
 
 	def make_choice(self, liste):
 		for i, element in enumerate(liste):
 			print(str(i + 1), "-", str(element))
-		answer = input("Quel choix voulez-vous?: ")
-		answer = int(answer) - 1
+		answer = self.validate_answer_int(liste)
 		element = liste[answer]
 		return answer, element
 
@@ -92,8 +102,8 @@ class Display(object):
 			index += 1
 			data.append(value_to_append)
 		print(data)
-		answer = int(input("Plus d'info sur un produit: "))
-		return (answer - 1)
+		answer = self.validate_answer_int(products_list, 1)
+		return answer
 
 		
 
@@ -104,7 +114,7 @@ class Display(object):
 							("url", "Url") ]
 		for key, value in tuple_keys_list:
 			print(value, "=", product[key])
-		answer = input("Validez votre choix: ")
+		answer = self.validate_answer_yes_no()
 		return answer, (product["barcode"], product["nutrition_score"])
 
 	def product(self, index, name, products_list):
@@ -113,11 +123,12 @@ class Display(object):
 		headers_list = ["Touche", "Nom produit", "Marque", "Score"]
 		while True:
 			os.system("cls")
+			print("Tableau Produits:\n", " ")
 			answer = self.create_tablib(products_list, headers_list)
 			if answer == -1:
 				return False, index, products_list, 0
 			sub_answer, value_product = self.display_informations_product(products_list[answer])
-			if sub_answer == "O":
+			if sub_answer: #== "O":
 				index += 1
 				return True, index, products_list, value_product
 			continue
@@ -139,6 +150,7 @@ class Display(object):
 		headers_list = ["Touche", "Nom produit", "Marque", "Score"]
 		while True:
 			os.system("cls")
+			print("Tableau Substituts:\n", " ")
 			answer = self.create_tablib(substitute_list, headers_list)
 			if answer == -1:
 				index -= 1
@@ -160,7 +172,7 @@ class Display(object):
 								[intern_index, name, products_list, value]]
 			launched, intern_index, products_list, value = functions_list[intern_index](*parameters_list[intern_index])
 		index -= 1
-		return index,index_2,0
+		return index, index_2, 0
 
 
 
