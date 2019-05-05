@@ -9,6 +9,10 @@ class API(object):
 		self.checker = productC.ProductClassifier()
 
 	def get_request_product(self,categorie):
+		"""
+		méthode qui permet de récupérer les données 'brutes' d'une catégorie de l'API grâce au module requests.
+		Ensuite, cette méthode retourne une liste de l'ensemble des produits  
+		 """
 		http_link = ("https://be-fr.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&"
 		"tagtype_0=categories&tag_contains_0=contains&tag_0={}"
 		"&sort_by=unique_scans_n&page_size=200&json=1")
@@ -22,6 +26,10 @@ class API(object):
 		return self.products
 
 	def find_value(self,dictionary,key, key_2):
+		"""
+		Cette méthode permet de trouver une valeur d'un produit via une clé. 
+		Parfois, il se peut que l'on se retrouve avec un dictionnaire de dictionnaire
+		"""
 		if key_2 == 0:
 			try:
 				dictionary_value = dictionary[key]
@@ -36,6 +44,12 @@ class API(object):
 		return str(dictionary_value)
 
 	def find_informations(self,categorie):
+		"""
+		Méthode qui permet de trouver les informations nécessaires(code barre,...) pour
+		chaque produit trouvé d'une catégorie donnée et traite l'ensemble des produits via une boucle
+		Ensuite, cette méthode ajoute à une liste 'products list', chaque produit 'traité' (qui est aussi
+		une liste).
+		"""
 		self.get_request_product(categorie) 
 		for product in self.products:
 			variables_of_a_product = []
@@ -46,9 +60,15 @@ class API(object):
 		self.use_the_checker()
 
 	def use_the_checker(self):
+		"""
+		Méthode qui utilise l'objet checker qui permet d'analyser les données receuillies 
+		"""
 		self.products_list = self.checker.complete_check(self.products_list)
 
 	def reset_products_list(self):
+		"""
+		Méthode qui réinitialise la liste de produits 'products list'
+		"""
 		self.products_list = []
 
 if __name__ == "__main__": 

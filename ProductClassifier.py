@@ -11,15 +11,19 @@ class ProductClassifier(object):
 		 "Leclerc", "Géant", "Dia", "Edeka", "magasins diététiques"]
 
 	def capital_letter(self, str_list):
-		""" method that put capital letter at 
-		the beginning of each word of a list """
+		"""
+		method that put capital letter at 
+		the beginning of each word of a list
+		 """
 		title_list = [] 
 		for string in str_list:
 			title_list.append(string.title())
 		return title_list
 
 	def separate_stores(self,stores):
-		"""method that separate and isolate each store of a product"""
+		"""
+		method that separate and isolate each store of a product
+		"""
 		stores_list_formatted = []
 		stores_list = stores.split(",")
 		for store in stores_list:
@@ -27,7 +31,9 @@ class ProductClassifier(object):
 		return stores_list_formatted
 
 	def verify_stores(self, stores):
-		"""method that verify if a store is known or not"""
+		"""
+		method that verify if a store is known or not
+		"""
 		verified_stores = []
 		stores = self.separate_stores(stores)
 		for store in stores:
@@ -41,8 +47,10 @@ class ProductClassifier(object):
 			return ""
 
 	def remove_bad_products(self,list_products):
+		"""
+		method that removes products that don't satisfy conditions
+		"""
 		good_products = []
-		"""method that remove products that don't satisfy conditions"""
 		for i,product in enumerate(list_products):
 			if "" in product:
 				pass
@@ -51,17 +59,19 @@ class ProductClassifier(object):
 		return good_products
 
 	def separate_brands(self, brands):
+		"""
+		method that return the first brand of a product
+		"""
 		if "," in brands:
 			brands_list = brands.split(",")
 			return brands_list[0].strip()
 		return brands
-
-	def echap_single_string(self, value):
-		pass
-
 			
-
 	def complete_check(self,list_products):
+		"""
+		methode qui effectue la vérification complète des produits d'une catégorie
+		et qui retire à terme, les produits qui ont des informations manquantes
+		"""
 		verified_products = []
 		for product in list_products:
 			verified_product = []

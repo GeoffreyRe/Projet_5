@@ -4,7 +4,8 @@ import tablib
 class Display(object):
 	def __init__(self):
 		self.first_menu_list = ["Quels aliments souhaitez-vous remplacer ?",
-							"Retrouvez mes aliments substitués."]
+							"Retrouvez mes aliments substitués.",
+							"Quitter le programme."]
 
 		self.category_list = ["Produits laitiers", "Boissons", "Petit-déjeuners",
 								 "Viandes", "Desserts"]
@@ -19,17 +20,21 @@ class Display(object):
 	def menu(self):
 		index, intern_index, name, intern_index_2 = 0, 0, 0, 0
 		index_list = [0,1,2]
-		functions_list = [self.first_menu, self.category_menu,self.sub_cat_menu,self.products_menu,self.substituate_menu]
+		functions_list = [self.first_menu, self.category_menu,self.sub_cat_menu,self.products_menu,
+							self.user_menu]
 		launched = True
 		while launched:
-			parameters_list = [[index],[index],[index, intern_index], [index, name, intern_index],[]]
-			index, intern_index,name = functions_list[index](*parameters_list[index])
 			os.system("cls")
+			parameters_list = [[index],[index],[index, intern_index], [index, name, intern_index],[]]
+			launched, index, intern_index,name = functions_list[index](*parameters_list[index])
+
 
 	def validate_answer_int(self, product_list, sentence = 0):
+		self.create_space()
 		validate = False
 		sentences = ["Quel choix voulez-vous ?: ", 
-		"Sur quel produit voulez-vous plus d'information ?: "]
+		"Sur quel produit voulez-vous plus d'information ?: ",
+		"Plus d'information ?: "]
 		while not validate:
 			answer = input(sentences[sentence])
 			try:
@@ -44,6 +49,7 @@ class Display(object):
 		return (answer - 1) 
 
 	def validate_answer_yes_no(self, question):
+		self.create_space()
 		questions = ["Voulez-vous valider votre choix ? (O/N): ",
 					"Voulez-vous enregistrer votre choix ? (O/N): "]
 		while True:
@@ -67,11 +73,15 @@ class Display(object):
 
 	def first_menu(self, index):
 		answer, name = self.make_choice(self.first_menu_list)
+		launched = True
 		if answer == 0:
 			index += 1
 		elif answer == 1:
 			index += 4
-		return index, answer, name
+		elif answer == 2:
+			print("Merci et à bientôt !")
+			launched = False
+		return launched ,index, answer, name
 		
 	def category_menu(self, index):
 		answer, name = self.make_choice(self.category_list)
@@ -79,7 +89,7 @@ class Display(object):
 			index -= 1
 		else:
 			index += 1
-		return index, answer, name
+		return True, index, answer, name
 
 	def sub_cat_menu(self, index, intern_index):
 		answer, name = self.make_choice(self.sub_category_list[intern_index])
@@ -88,7 +98,7 @@ class Display(object):
 		else:
 			index += 1
 
-		return index, intern_index, name
+		return True, index, intern_index, name
 
 	def create_tablib(self, products_list,headers_list):
 		data, data.headers = tablib.Dataset(),headers_list	
@@ -107,6 +117,7 @@ class Display(object):
 		
 
 	def display_informations_product(self, product):
+		self.create_space()
 		tuple_keys_list = [("barcode","Code barre produit"),("product_name", "Nom du produit"),
 							("brand","Marque"), ("nutrition_grade", "Grade nutritionnel"),
 							("nutrition_score", "Score nutritionnel"), ("stores", "Magasins"),
@@ -169,38 +180,67 @@ class Display(object):
 								[intern_index, name, products_list, value]]
 			launched, intern_index, products_list, value = functions_list[intern_index](*parameters_list[intern_index])
 		index -= 1
-		return index, index_2, 0
-
-
-
-		
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		return True, index, index_2, 0
 
 
 		
-	def substituate_menu(self):
-		print(self.bdd.find_substitute())
-		print("#"*20)
-		answer = input("Appuyez sur entrée pour quitter")
-		return 0,0,0
+	def user_menu(self):
+		prod_sub_list = self.bdd.find_substitute()
+		headers_list = ["Touche","Nom produit", "Nutriscore produit",
+		 					"Nom substitut", "Nutriscore substitut"]
+		while True:
+			os.system("cls")
+			answer = self.create_tablib_user(prod_sub_list, headers_list)
+			if answer == -1:
+				break
+			self.display_informations_user(prod_sub_list[answer])
+
+		return True, 0, 0, 0
+
+
+
+
+	def create_tablib_user(self, user_list, headers_list):
+		data, data.headers = tablib.Dataset(), headers_list
+		keys_list,index = ["name_product", "nutrition_score_product",
+							"name_substitute", "nutrition_score_sub"], 1
+		for dictionnary in user_list:
+			value_to_append = []
+			for key in keys_list:
+				value_to_append.append(dictionnary[key])
+			value_to_append.insert(0, index)
+			index += 1
+			data.append(value_to_append)
+		print(data)
+		answer = self.validate_answer_int(user_list, 2)
+		return answer
+
+	def create_space(self):
+		print("")
+		print("#"*60)
+		print("")
+
+	def display_informations_user(self, product):
+		self.create_space()
+		tuple_keys_product_list = [("id_product", "code barre produit"), ("name_product","nom produit"),("brand_product","marque produit"),
+		("url_product","url produit"), ("nutrition_grade_product","grade produit"), ("nutrition_score_product","score produit"),
+		("stores_product","magasins où trouver le produit"), ("name_category", "nom catégorie"), ("name_sub_category","nom sous_catégorie")]
+
+		tuple_keys_sub_list = [("id_substitute", "code barre substitut"), ("name_substitute","nom substitut"),("brand_substitute","marque substitut"),
+		("url_substitute","url substitut"), ("nutrition_grade_sub","grade substitut"), ("nutrition_score_sub","score substitut"),
+		("stores_substitute","magasins où trouver le substitut"), ("name_category", "nom catégorie"), ("name_sub_category","nom sous_catégorie")]
+		for key, value in tuple_keys_product_list:
+			print(value, "=", product[key])
+		self.create_space()
+		print("Substitué par :")
+		self.create_space()
+
+		for key, value in tuple_keys_sub_list:
+			print(value, "=", product[key])
+
+		input("Appuyez sur entrée :")
+
+
 
 
 if __name__ == "__main__":

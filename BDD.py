@@ -18,11 +18,26 @@ class BDD(object):
 		self.database.query("USE {}".format(self.config["Database"]))
 
 	def find_substitute(self):
+		sub_query_1 = "SELECT GROUP_CONCAT(name SEPARATOR ', ') FROM Assoc_product_store INNER JOIN Store \
+		ON Store.id = Assoc_product_store.id_store where barcode_product = prod.barcode"
+		sub_query_2 = "SELECT GROUP_CONCAT(name SEPARATOR ', ') FROM Assoc_product_store INNER JOIN Store \
+		ON Store.id = Assoc_product_store.id_store where barcode_product = sub.barcode"
+		query = "SELECT User.id_product, prod.product_name AS name_product, prod.brand AS brand_product,\
+		prod.url AS url_product, prod.nutrition_grade AS nutrition_grade_product, prod.nutrition_score AS nutrition_score_product, ({}) AS stores_product,\
+		User.id_substitute, sub.product_name AS name_substitute, sub.brand AS brand_substitute, sub.url AS url_substitute,\
+		sub.nutrition_grade AS nutrition_grade_sub, sub.nutrition_score AS nutrition_score_sub, ({}) AS stores_substitute, Category.name AS name_category,\
+		Sub_category.name AS name_sub_category FROM User INNER JOIN Product AS prod ON prod.barcode = User.id_product\
+		INNER JOIN Product AS sub ON sub.barcode = User.id_substitute INNER JOIN Sub_category ON Sub_category.id = prod.id_sub_category\
+		INNER JOIN Category ON Category.id = Sub_category.id_category".format(sub_query_1,sub_query_2)
+		sub_list = self.database.query(query).all(as_dict = True)
+		return sub_list
+		"""
 		query = "SELECT User.id_product, Prod.product_name AS product, Prod.nutrition_score AS nut_score_product, User.id_substitute,\
 			 Sub.product_name AS substitute, Sub.nutrition_score AS nut_score_sub FROM User INNER JOIN Product AS Prod ON\
 			 Prod.barcode = User.id_product INNER JOIN Product AS Sub ON Sub.barcode = User.id_substitute"
 		substitute_list = self.database.query(query).dataset
 		return substitute_list
+		"""
 
 	def find_products(self, sub_category, nutrition_score = ""):
 		query_id_sub_cat = "SELECT id FROM Sub_category WHERE name = {}".format("'" + sub_category + "'")
@@ -48,5 +63,5 @@ class BDD(object):
 		
 if __name__ == "__main__":
 	bdd = BDD()
-	print(bdd.find_products("snacks sucrés", 12))
+	print(bdd.find_substitute())
 		
