@@ -24,23 +24,28 @@ class BDD(object):
 		substitute_list = self.database.query(query).dataset
 		return substitute_list
 
-	def find_products(self, sub_category, nutrition_score = False):
+	def find_products(self, sub_category, nutrition_score = ""):
 		query_id_sub_cat = "SELECT id FROM Sub_category WHERE name = {}".format("'" + sub_category + "'")
 		id_sub_cat = self.database.query(query_id_sub_cat).all(as_dict = True)[0]["id"]
 		sub_query = "SELECT GROUP_CONCAT(name SEPARATOR ', ') FROM Assoc_product_store INNER JOIN Store ON Store.id = Assoc_product_store.id_store where barcode_product = barcode"
-		if nutrition_score == False:
+		if nutrition_score == "":
 			query = "SELECT barcode, product_name, brand, nutrition_score, url, nutrition_grade, ({}) as stores FROM Product WHERE id_sub_category = {} ORDER BY RAND() LIMIT 10".format(sub_query, id_sub_cat)
 		else:
-			print("On est au bon endroit")
-			input()
 			query = "SELECT barcode, product_name, brand, url, nutrition_score, nutrition_grade, ({}) as stores FROM Product WHERE id_sub_category = {}\
 					 AND nutrition_score < {} ORDER BY RAND() LIMIT 10".format(sub_query, id_sub_cat, nutrition_score)
 		products_list = self.database.query(query)
 		products_list = products_list.all(as_dict = True)
 		return products_list
 
-
-
+	def record_table_user(self, product, substitute):
+		id_product, id_substitute = product[0], substitute[0]
+		query = "INSERT INTO User VALUES({},{})".format(id_product,id_substitute)
+		try:
+			self.database.query(query)
+			print("votre enregistrement a bien été effectué")
+		except:
+			print("Il semblerait qu'un problème soit survenu" + ", l'enregistrement a donc échoué")
+		
 if __name__ == "__main__":
 	bdd = BDD()
 	print(bdd.find_products("snacks sucrés", 12))

@@ -14,9 +14,6 @@ class Display(object):
 									"Confitures et marmelades"],["Charcuteries",
 									"Volailles"],["Desserts au chocolat", "Compotes",
 									"Desserts lactés", "Snacks sucrés"]]
-		self.substituate_list = []
-
-		self.menu_list = [self.first_menu_list,self.category_list, self.sub_category_list, self.substituate_list]
 		self.bdd = database.BDD()
 
 	def menu(self):
@@ -46,16 +43,18 @@ class Display(object):
 				print("Ce chiffre ne correspond à aucun choix")
 		return (answer - 1) 
 
-	def validate_answer_yes_no(self):
+	def validate_answer_yes_no(self, question):
+		questions = ["Voulez-vous valider votre choix ? (O/N): ",
+					"Voulez-vous enregistrer votre choix ? (O/N): "]
 		while True:
-			answer = input("Voulez-vous valider votre choix ? (O/N): ")
+			answer = input(questions[question])
 			if answer == "O":
 				return True
 			elif answer == "N":
 				return False
 			else:
 				print("Ce n'est pas une réponse valide\n"+
-				"les seuls réponses possibles étant 'O' (=Oui) ou 'N' (='Non')") 
+				"les seuls réponses possibles étant 'O' (='Oui') ou 'N' (='Non')") 
 
 
 	def make_choice(self, liste):
@@ -114,7 +113,7 @@ class Display(object):
 							("url", "Url") ]
 		for key, value in tuple_keys_list:
 			print(value, "=", product[key])
-		answer = self.validate_answer_yes_no()
+		answer = self.validate_answer_yes_no(0)
 		return answer, (product["barcode"], product["nutrition_score"])
 
 	def product(self, index, name, products_list):
@@ -128,20 +127,18 @@ class Display(object):
 			if answer == -1:
 				return False, index, products_list, 0
 			sub_answer, value_product = self.display_informations_product(products_list[answer])
-			if sub_answer: #== "O":
+			if sub_answer:
 				index += 1
 				return True, index, products_list, value_product
 			continue
 
 
 	def recording_into_user(self, value_product, value_substitute):
-		answer = input("Voulez-vous enregistrer votre choix ?: ")
-		if answer == "O":
-			self.bdd.record_table_user()
-			print("votre enregistrement a bien été effectué")
+		answer = self.validate_answer_yes_no(1)
+		if answer:
+			self.bdd.record_table_user(value_product, value_substitute)
 		else:
-			print("pas de soucis")
-		input()
+			print("Vous allez être redirigé vers le menu")
 
 
 				
@@ -156,7 +153,7 @@ class Display(object):
 				index -= 1
 				return True , index, products_list, 0
 			sub_answer, value_substitute = self.display_informations_product(substitute_list[answer])
-			if sub_answer == "O":
+			if sub_answer:
 				self.recording_into_user(value, value_substitute)
 				return False, index, products_list, value
 			continue
