@@ -1,189 +1,241 @@
-import records
+"""
+Ceci est une docstring de module
+"""
 import json
-import API
 import copy
-class BDD_ini(object):
-	def __init__(self):
-		self.stores_list = ["Carrefour", "Carrefour Market", "Carrefour Planet",
-		 "Carrefour Express", "Carrefour GB", "Colruyt", "Spa",
-		 "Delhaize", "Delhaize City","Proxy Delhaize", "AD Delhaize", "Shop\\'n Go",
-		 "Albert Heijn", "Intermarché", "Cora", "Match", "Smatch" , "Louis Delhaize",
-		 "Aldi", "Lidl", "Magasins U", "Super U", "Hyper U", "Auchan", "Noz", "Casino",
-		 "Leclerc", "Géant", "Dia", "Edeka", "magasins diététiques"]
-		self.category_list = ["Produits laitiers", "Boissons", "Petit-déjeuners",
-								 "Viandes", "Desserts"]
-		self.sub_category_list = [["Laits", "Beurres", "Boissons lactées", "Fromages"],
-									["Sodas", "Boissons au thé", "Boissons énergisantes"],
-									["Céréales pour petit-déjeuner", "Pâtes à tartiner",
-									"Confitures et marmelades"],["Charcuteries",
-									"Volailles"],["Desserts au chocolat", "Compotes",
-									"Desserts lactés", "Snacks sucrés"]]
-		self.openfoodfact = API.API()
-	def import_json_data(self):
-		"""
-		méthode qui importe les données contenues dans un fichier json
-		"""
-		with open("config.json", "r") as file:
-			self.config = json.load(file)
-		
-	def connection(self):
-		"""
-		méthode qui permet la connection à mysql via un utilisateur + mot de passe
-		"""
-		self.database = records.Database("mysql+mysqlconnector://{}:{}@localhost".format(self.config["User"],self.config["Pw"]))
+import records
+import API
 
-	def go_to_database(self):
-		"""
-		méthode qui d'une part, change l'encodage et d'autre part,
-		se déplace dans la base de données voulue
-		"""
-		self.database.query("SET NAMES 'utf8mb4'")
-		self.database.query("USE {}".format(self.config["Database"]))
+class BDD_ini():
+    """
+    Class that has the responsibility to fill different tables of
+    database.
+    """
+    def __init__(self):
+        self.stores_list = ["Carrefour", "Carrefour Market", "Carrefour Planet",
+                            "Carrefour Express", "Carrefour GB", "Colruyt", "Spa",
+                            "Delhaize", "Delhaize City", "Proxy Delhaize", "AD Delhaize",
+                            "Shop\\'n Go", "Albert Heijn", "Intermarché", "Cora", "Match",
+                            "Smatch", "Louis Delhaize", "Aldi", "Lidl", "Magasins U",
+                            "Super U", "Hyper U", "Auchan", "Noz", "Casino", "Leclerc",
+                            "Géant", "Dia", "Edeka", "magasins diététiques"]
+        self.category_list = ["Produits laitiers", "Boissons", "Petit-déjeuners",
+                              "Viandes", "Desserts"]
+        self.sub_category_list = [
+            ["Laits", "Beurres", "Boissons lactées", "Fromages"],
+            ["Sodas", "Boissons au thé", "Boissons énergisantes"],
+            ["Céréales pour petit-déjeuner", "Pâtes à tartiner", "Confitures et marmelades"],
+            ["Charcuteries", "Volailles"],
+            ["Desserts au chocolat", "Compotes", "Desserts lactés", "Snacks sucrés"]
+            ]
 
-	def check_initialisation(self):
-		"""
-		méthode qui modifie la constante 'Initialisation'
-		"""
-		if self.config["Initialisation"] == 0:
-			self.config["Initialisation"] = 1
-			return True
-		else:
-			return False
-	def add_single_string(self, str):
-		"""
-		méthode qui rajoute des '"' afin de pouvoir insérer les données de type string (Char, Varchar,...)
-		"""
-		try:
-			str = "\"" + str + "\""
-		except:
-			str = str
-		return str
+        self.config = None # is going to be initialize in method 'import_json_data()'
+        self.database = None # is going to be initialize in method 'connection()'
+        self.dict_of_stores = None # is going to be initialize in method 'retrieve_store_dict()'
+        self.openfoodfact = API.API()
 
-	def fill_table_store(self):
-		"""
-		Méthode qui remplit la table 'Store'.
-		"""
-		for store in self.stores_list:
-			self.database.query("INSERT INTO Store VALUES (NULL, {})".format(self.add_single_string(store)))
+    def import_json_data(self):
+        """
+        Method that imports datas contained into json file
+        """
+        # we use method of module json
+        with open("config.json", "r") as file:
+            self.config = json.load(file)
 
-	def retrieve_store_dict(self):
-		"""
-		Méthode qui retourne un dictionnaire où chaque clé correspond au nom d'un magasin 
-		et sa valeur correspond à son id dans la table 'Store'
-		"""
-		self.dict_of_stores = {}
-		stores = self.database.query("SELECT * FROM Store").all(as_dict = True)
-		for store in stores:
-			self.dict_of_stores[store["name"]] = store["id"]
-		return self.dict_of_stores
+    def connection(self):
+        """
+        Method that allows connection with mysql with an user and a password
+        """
+        sent_con = "mysql+mysqlconnector://{}:{}@localhost"
+        self.database = records.Database(sent_con.format(self.config["User"], self.config["Pw"]))
 
-	def fill_table_category(self):
-		"""
-		Méthode qui insére les données dans la table Category
-		"""
-		for category in self.category_list:
-			category = self.add_single_string(category)
-			self.database.query("INSERT INTO Category VALUES (NULL,{})".format(category))
+    def go_to_database(self):
+        """
+        Method that allows to go to the right database and
+        changes encoding
+        """
+        self.database.query("SET NAMES 'utf8mb4'")
+        self.database.query("USE {}".format(self.config["Database"]))
 
-	def fill_table_sub_category(self):
-		"""
-		Méthode qui insére les données dans la table Sub_category
-		"""
+    def check_initialisation(self):
+        """
+        Method that verifies constant 'initialisation' and
+        change it.
+        """
+        if self.config["Initialisation"] == 0:
+            self.config["Initialisation"] = 1
+            return True
 
-		for index, sub_category in enumerate(self.sub_category_list):
-			category_name = self.add_single_string(self.category_list[index])
-			query_1 = "SELECT id FROM Category WHERE name = {}".format(category_name)
-			foreign_key_id = ((self.database.query(query_1)).all(as_dict = False))[0]["id"]
-			for sub_cat in sub_category:
-				sub_cat = self.add_single_string(sub_cat)
-				query_2 = "INSERT INTO Sub_category VALUES (NULL, {0},{1})".format(sub_cat,foreign_key_id)
-				self.database.query(query_2)
+        return False
+    def add_single_string(self, string):
+        """
+        method that adds " " " in order to insert values
+        of type char, varchar,...
+        """
+        try:
+            string = "\"" + string + "\""
+        except:
+            string = string
+        return string
 
-	def call_api(self,sub_category):
-		"""
-		Méthode qui permet de récupérer via un objet de la classe API, 
-		les produits (déjà traités) d'une sous_catégorie 
-		"""
-		self.openfoodfact.find_informations(sub_category)
-		products_list = copy.deepcopy(self.openfoodfact.products_list)
-		self.openfoodfact.reset_products_list()
-		return products_list
+    def fill_table_store(self):
+        """
+        Method that fills table store from
+        attribute stores_list.
+        """
+        for store in self.stores_list:
+            sentence = "INSERT INTO Store VALUES (NULL, {})"
+            self.database.query(sentence.format(self.add_single_string(store)))
 
-	def find_correspondence_store(self,product):
-		"""
-		Méthode qui permet de trouver le (ou les) id du (ou des) magasin(s) d'un produit 
-		"""
-		index = self.openfoodfact.variables_list.index("stores")
-		stores = product[index]
-		stores_id = []
-		for store in stores:
-			stores_id.append(self.dict_of_stores[store])
-		product.remove(stores)
-		product.insert(index,stores_id)
-		return product
+    def retrieve_store_dict(self):
+        """
+        Method that returns a dictionnary where a key correspond to he name of a store and
+        its value correspond to id of this store in table 'store'.
+        """
+        self.dict_of_stores = {}
+        stores = self.database.query("SELECT * FROM Store").all(as_dict=True)
+        for store in stores:
+            self.dict_of_stores[store["name"]] = store["id"]
+        return self.dict_of_stores
 
-	def fill_table_assoc(self, product):
-		"""
-		Méthode qui permet de remplir la table Assoc_product_store
-		via le code barre du produits et le ou les id du (ou des) magasin(s) correspondants
-		"""
-		index_stores = self.openfoodfact.variables_list.index("stores")
-		index_barcode = self.openfoodfact.variables_list.index("_id")
-		stores_product = self.add_single_string(product[index_stores])
-		barcode_product = self.add_single_string(product[index_barcode])
-		for store in stores_product:
-			query = "INSERT INTO Assoc_product_store VALUES ({},{})".format(barcode_product, store)
-			self.database.query(query)
-	def fill_table_product(self):
-		"""
-		Méthode qui permet de remplir la table Product via l'ensemble des informations
-		receuillies par l'api puis traitée par un objet de la classe ProductClassifier
-		"""
-		for sub_category in self.sub_category_list:
-			for sub_cat in sub_category:
-				for product in self.call_api(sub_cat):
-					product = self.find_correspondence_store(product)
-					list_variables = ["a","b","c","d","e","f"]
-					list_value = ["_id","product_name","brands","url",
-					"nutrition_grades","nutriments"]
-					for i, var in enumerate(list_variables):
-						locals()[var] = self.add_single_string(product\
-						[self.openfoodfact.variables_list.index(list_value[i])])
-					g = self.database.query("SELECT id FROM Sub_category\
-					WHERE name={}".format(self.add_single_string(sub_cat))).all(as_dict = True)[0]["id"]
-					query = "INSERT INTO product VALUES({},{},{},\
-					{},{},{},{})".format(locals()["a"],locals()["b"],locals()["c"],\
-					locals()["d"],locals()["e"],locals()["f"],g).replace("\n","")
-					try:
-						self.database.query(query)
-						self.fill_table_assoc(product)
-					except:
-						pass
+    def fill_table_category(self):
+        """
+        Method wich inserts datas into table 'Category'
+        Méthode qui insére les données dans la table Category
+        """
+        for category in self.category_list:
+            category = self.add_single_string(category)
+            self.database.query("INSERT INTO Category VALUES (NULL,{})".format(category))
 
-	def connection_and_init(self):
-		"""
-		Méthode qui appelle les 3 méthodes nécessaires pour communiquer avec la base de données
-		"""
-		self.import_json_data()
-		self.connection()
-		self.go_to_database()
+    def fill_table_sub_category(self):
+        """
+        Method that inserts datas into table 'Sub_category'
+        """
+        # sub_category contained in sub_category_list is a list
+        # and the index of this list corresponds to index of
+        # the category contained in category_list
+        for index, sub_category in enumerate(self.sub_category_list):
+            category_name = self.add_single_string(self.category_list[index])
+            # We retrieve id of category wich corresponds to sub_category
+            # example : category of 'laits' is 'produits laitiers'
+            query_1 = "SELECT id FROM Category WHERE name = {}".format(category_name)
+            foreign_key_id = ((self.database.query(query_1)).all(as_dict=False))[0]["id"]
+            for sub_cat in sub_category:
+                sub_cat = self.add_single_string(sub_cat)
+                sentence = "INSERT INTO Sub_category VALUES (NULL, {0},{1})"
+                query_2 = sentence.format(sub_cat, foreign_key_id)
+                self.database.query(query_2)
 
-	def complete_fill(self):
-		"""
-		Méthode qui regroupe l'ensemble des méthodes afin de remplir complètement la base de données
-		"""
-		self.connection_and_init()
-		if self.check_initialisation():
-			self.fill_table_store()
-			self.fill_table_category()
-			self.fill_table_sub_category()
-			self.retrieve_store_dict()
-			self.fill_table_product()
-			with open("values.json", "w") as file:
-				file.write(json.dumps(self.config ,ensure_ascii = False, indent = 4))
-		else:
-			print("The database is already filled")
+    def call_api(self, sub_category):
+        """
+        Method wich allows to retrieve products of a sub_category
+        (thanks to an object of Class API)
+        """
+        self.openfoodfact.find_informations(sub_category)
+        products_list = copy.deepcopy(self.openfoodfact.products_list)
+        self.openfoodfact.reset_products_list()
+        return products_list
+
+    def find_correspondence_store(self, product):
+        """
+        Method wich allows to find 1 (or more) id of store(s) wich correspond to a
+        product.
+        """
+        # we find index of value "stores"
+        index = self.openfoodfact.variables_list.index("stores")
+        stores = product[index] # we find (1 or more) stores associated with a product
+        stores_id = []
+        for store in stores:
+            stores_id.append(self.dict_of_stores[store]) # we find id of each store
+        product.remove(stores)
+        product.insert(index, stores_id) # we change names of stores into id of stores
+        return product
+
+    def fill_table_assoc(self, product):
+        """
+        Method wich allows to fill table 'Assoc_product_store' with
+        barcode of product and 1 (or more) of correspondent store(s).
+        """
+        index_stores = self.openfoodfact.variables_list.index("stores")
+        index_barcode = self.openfoodfact.variables_list.index("_id")
+        stores_product = self.add_single_string(product[index_stores])
+        barcode_product = self.add_single_string(product[index_barcode])
+        for store in stores_product:
+            query = "INSERT INTO Assoc_product_store VALUES ({},{})".format(barcode_product, store)
+            self.database.query(query)
+    def fill_table_product(self):
+        """
+        Method wich allows to fill table Product with all informations collected by API
+        then processed by a ProductClassifier object.
+        """
+        for sub_category in self.sub_category_list:
+            for sub_cat in sub_category:
+                # for each product in a sub_category
+                for product in self.call_api(sub_cat):
+                    product = self.find_correspondence_store(product)
+                    list_variables = ["a", "b", "c", "d", "e", "f"]
+                    list_value = ["_id", "product_name", "brands", "url",
+                                  "nutrition_grades", "nutriments"]
+                    for i, var in enumerate(list_variables):
+                        locals()[var] = self.add_single_string(product\
+                        [self.openfoodfact.variables_list.index(list_value[i])])
+                    g = self.database.query("SELECT id FROM Sub_category\
+                    WHERE name={}".format(self.add_single_string(sub_cat)))
+                    g = g.all(as_dict=True)[0]["id"]
+                    query = "INSERT INTO product VALUES({},{},{},\
+                    {},{},{},{})".format(locals()["a"], locals()["b"], locals()["c"],\
+                    locals()["d"], locals()["e"], locals()["f"], g).replace("\n", "")
+                    try:
+                        self.database.query(query)
+                        self.fill_table_assoc(product)
+                    except:
+                        pass
+
+        """
+        for sub_category in self.sub_category_list:
+            for sub_cat in sub_category:
+                # for each product in a sub_category
+                for product in self.call_api(sub_cat):
+                    product = self.find_correspondence_store(product)
+                    liste = []
+                    for i in [0,2,5,3,1,6]:
+                        liste.append(self.add_single_string(product[i]))
+                    query_1 = "SELECT id FROM Sub_category WHERE name={}"
+                    value = self.database.query(query_1).format(self.add_single_string(sub_cat)))
+                    liste.append(value.all(as_dict=True)[0]["id"])
+                    query = "INSERT INTO product VALUES({},{},{},\
+                    {},{},{},{})".format(*liste).replace("\n", "")
+                    try:
+                        self.database.query(query)
+                        self.fill_table_assoc(product)
+                    except:
+                        pass
+        """
+
+    def connection_and_init(self):
+        """
+        Method wich calls 3 other methods wich are needed to communiquate with database.
+        """
+        self.import_json_data()
+        self.connection()
+        self.go_to_database()
+
+    def complete_fill(self):
+        """
+        Method wich gathers togheter methods in order to completely fill the database.
+        """
+        self.connection_and_init()
+        if self.check_initialisation(): # if database is not already filled
+            self.fill_table_store()
+            self.fill_table_category()
+            self.fill_table_sub_category()
+            self.retrieve_store_dict()
+            self.fill_table_product()
+            with open("values.json", "w") as file:
+                file.write(json.dumps(self.config, ensure_ascii=False, indent=4))
+        else:
+            print("The database is already filled")
 
 if __name__ == "__main__":
-	bdd = BDD_ini()
-	bdd.complete_fill()
+    BDD = BDD_ini()
+    BDD.complete_fill()
