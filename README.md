@@ -13,21 +13,23 @@ projet_5 : Utilisez les données publiques de l'OpenFoodFacts
 
 ### 1.2 Description du projet
 -----------------------------
+
 Le but de ce projet est de créer un programme qui interagirait avec la base Open Food Facts
 pour en récupérer les aliments, les comparer et proposer à l'utilisateur un substitut
-plus sain à l'aliment qui lui fait envie. Plus concrètement, le programme devra pouvoir
-récupérer un ensemble de produits grâce à l'API OpenFoodFact. Ensuite, ce programme sera
-capable d'insérer un ensemble d'informations au sein d'une base de données
-(crée spécialement pour le projet). Enfin l'utilisateur pourra alors intéragir avec la base
-de données par l'intermédiaire du programme. 
-
+plus sain à l'aliment qui lui fait envie.  
+Plus concrètement, le programme devra pouvoirrécupérer un ensemble de produits grâce à l'API
+OpenFoodFact. Ensuite, ce programme sera capable d'insérer un ensemble d'informations au sein
+d'une base de données (crée spécialement pour le projet).  
+Enfin l'utilisateur pourra alors intéragir avec la base de données par l'intermédiaire du programme. 
+  
 ### 1.3 Description du parcours utilisateur
 -------------------------------------------
 L'utilisateur est sur le terminal et lance le fichier main.py.  
 Le programme lui affiche alors les choix suivants :
 1. Quels aliments souhaitez-vous remplacer ?
 2. Retrouvez mes aliments substitués
-3. Quittez le programme   
+3. Quittez le programme 
+    
 L'utilisateur doit alors faire un choix entre les propositions
 (En indiquant le chiffre associé au choix voulu).  
 Voyons ensemble les détails de ces différents choix.
