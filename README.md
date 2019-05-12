@@ -28,8 +28,8 @@ Le programme lui affiche alors les choix suivants :
 1. Quels aliments souhaitez-vous remplacer ?
 2. Retrouvez mes aliments substitués
 3. Quittez le programme  
-L'utilisateur doit alors faire un choix entre les propositions.
-(En indiquant le chiffre associé au choix voulu)
+L'utilisateur doit alors faire un choix entre les propositions
+(En indiquant le chiffre associé au choix voulu).  
 Voyons ensemble les détails de ces différents choix.
 
 #### 1.3.1 Quels aliments souhaitez-vous remplacer
@@ -69,10 +69,10 @@ Pour "naviguer" au sein du menu, l'utilisateur devra intéragir avec le programm
 Le plus souvent, il s'agira d'indiquer au programme le numéro associé au choix voulu. Ensuite, il
 suffit juste d'appuyer sur "Enter" pour que le programme prenne en compte ce choix. Dans certains cas,
 une réponse de type Oui/Non sera nécessaire. Dans ce cas, il suffit juste d'introduire O pour Oui et
-N pour Non avant d'appuyer sur "Enter" pour transmettre le choix au programme.
+N pour Non avant d'appuyer sur "Enter" pour transmettre le choix au programme.  
 Si l'utilisateur souhaite retourner vers un menu précédent, il lui suffit juste d'introduire le chiffre
 '0' lorsque le programme lui demande d'effectuer un choix (sauf lorsque le programme attend une réponse
-de type Oui/Non).
+de type Oui/Non).  
 Enfin, chaque réponse est vérifiée et si la réponse n'est pas une réponse "possible" (c'est-à-dire si
 l'utilisateur entre un mot alors que le programme attend un chiffre, ou lorsque le choix demandé n'existe
 pas,...) alors le programme indique à l'utilisateur que la réponse n'est pas correcte et lui propose
@@ -94,18 +94,18 @@ d'introduire à nouveau son choix.
 
 ### 2.1. Langages utilisés
 -------------------------
-le langage de programmation utilisé dans ce projet est python.
-Lien pour télécharger python : https://www.python.org/downloads/
-version de python lors du développement : 3.7
-
+le langage de programmation utilisé dans ce projet est python.  
+Lien pour télécharger python : https://www.python.org/downloads/  
+version de python lors du développement : 3.7  
+  
 Le langage utilisé pour communiquer avec la base de données est le SQL.
 
 ### 2.2. Base de données
 -----------------------
-Dans ce projet, une base de données est utilisée.
-Le système de gestion de base de données relationnelle utilisé est MySQL
-lien pour télécharger MySQL : https://www.mysql.com/downloads/
-version de MySQL lors du développement: 8.0
+Dans ce projet, une base de données est utilisée.  
+Le système de gestion de base de données relationnelle utilisé est MySQL  
+lien pour télécharger MySQL : https://www.mysql.com/downloads/  
+version de MySQL lors du développement: 8.0  
 De plus, un fichier de création des différentes tables nécessaires
 vous est fourni. Vous devez donc, avant toute utilisation du programme,
 créer ces tables via ce fichier dans la base de données de votre choix
@@ -121,8 +121,8 @@ commande pip.
 ------------------------------
 Ce fichier au format json contient les informations necessaires permettant la connexion
 à la base de données. Vous devez, avant toute utilisation du programme,
-spécifier dans ce fichier les différents informations nécessaires.
-Voyons chaque information à fournir:
+spécifier dans ce fichier les différents informations nécessaires.  
+Voyons chaque information à fournir:  
 
 - "User" = l'utilisateur MySQL avec lequel vous pouvez accéder à la base de données
 contenant les tables du projet.
@@ -139,15 +139,15 @@ Exemple: "Database" : "Projet_5"
 
 ## 3. Structure du projet
 -------------------------
-Il est à noter que le code associé au projet respecte la PEP8
-Le projet est subdivisé en différents fichiers:
+Il est à noter que le code associé au projet respecte la PEP8  
+Le projet est subdivisé en différents fichiers:  
 - API.py
 - ProductClassifier.py
 - BDD.py
 - BDD_ini.py
 - Display.py
-- Main.py
-
+- Main.py  
+  
 Chaque fichier contient une seule classe, du même nom que le fichier
 
 ### 3.1. API.py
@@ -186,8 +186,8 @@ développeur = Geoffrey Remacle
 
 ### 4.2. Utilisation d'API
 --------------------------
-Le projet utilise l'API "OpenFoodFacts"
-lien vers la documentation : https://fr.openfoodfacts.org/data
+Le projet utilise l'API "OpenFoodFacts"  
+lien vers la documentation : https://fr.openfoodfacts.org/data  
 Le module requests de python permet la communication avec cette API.
 
 ### 4.3. Langue du code
@@ -196,8 +196,8 @@ les noms de classes, fonctions, variables, les commentaires, les docstrings,... 
 
 ### 4.4. Liens
 --------------
-Lien vers le repository github:
-https://github.com/GeoffreyRe/Projet_5
-
-Lien vers la page de la formation "Développeur d'Application python":
-https://openclassrooms.com/fr/paths/68-developpeur-dapplication-python
+Lien vers le repository github:  
+https://github.com/GeoffreyRe/Projet_5  
+  
+Lien vers la page de la formation "Développeur d'Application python":  
+https://openclassrooms.com/fr/paths/68-developpeur-dapplication-python  
