@@ -27,7 +27,7 @@ L'utilisateur est sur le terminal et lance le fichier main.py.
 Le programme lui affiche alors les choix suivants :
 1. Quels aliments souhaitez-vous remplacer ?
 2. Retrouvez mes aliments substitués
-3. Quittez le programme  
+3. Quittez le programme   
 L'utilisateur doit alors faire un choix entre les propositions
 (En indiquant le chiffre associé au choix voulu).  
 Voyons ensemble les détails de ces différents choix.
@@ -123,20 +123,20 @@ Ce fichier au format json contient les informations necessaires permettant la co
 à la base de données. Vous devez, avant toute utilisation du programme,
 spécifier dans ce fichier les différents informations nécessaires.  
 Voyons chaque information à fournir:  
-
+  
 - "User" = l'utilisateur MySQL avec lequel vous pouvez accéder à la base de données
-contenant les tables du projet.
-Exemple: "User" : "Utilisateur1"
-
-- "Initialisation" = paramètre qui permet de savoir si la base de données est déjà remplie ou non.
-Ce paramètre ne doit pas être modifié.
-
--"Pw" = Le mot de passe associé à l'utilisateur MySQL fourni dans "User".
-Exemple: "Pw" : "Mon_mot_de_passe"
-
--"Database" = La base de données MySQL dans laquelle les tables ont été créées.
-Exemple: "Database" : "Projet_5"
-
+contenant les tables du projet.  
+Exemple: "User" : "Utilisateur1"  
+  
+- "Initialisation" = paramètre qui permet de savoir si la base de données est déjà remplie ou non.  
+Ce paramètre ne doit pas être modifié.  
+  
+- "Pw" = Le mot de passe associé à l'utilisateur MySQL fourni dans "User".  
+Exemple: "Pw" : "Mon_mot_de_passe"  
+  
+- "Database" = La base de données MySQL dans laquelle les tables ont été créées.  
+Exemple: "Database" : "Projet_5"  
+  
 ## 3. Structure du projet
 -------------------------
 Il est à noter que le code associé au projet respecte la PEP8  
