@@ -23,11 +23,11 @@ de données par l'intermédiaire du programme.
 
 ### 1.3 Description du parcours utilisateur
 -------------------------------------------
-L'utilisateur est sur le terminal et lance le fichier main.py.
+L'utilisateur est sur le terminal et lance le fichier main.py.  
 Le programme lui affiche alors les choix suivants :
 1. Quels aliments souhaitez-vous remplacer ?
 2. Retrouvez mes aliments substitués
-3. Quittez le programme
+3. Quittez le programme  
 L'utilisateur doit alors faire un choix entre les propositions.
 (En indiquant le chiffre associé au choix voulu)
 Voyons ensemble les détails de ces différents choix.
@@ -86,7 +86,7 @@ d'introduire à nouveau son choix.
 
 - Si l'utilisateur entre un caractère qui n'est pas un chiffre,
   le programme doit lui répéter la question,
-  
+
 - La recherche doit s'effectuer sur une base MySql.
 
 ## 2. Prérequis pour l'utilisation du projet
