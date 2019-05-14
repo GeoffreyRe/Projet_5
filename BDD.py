@@ -31,14 +31,20 @@ class BDD():
         """
         sentence = "mysql+mysqlconnector://{}:{}@localhost"
         query = sentence.format(self.config["User"], self.config["Pw"])
-        self.database = records.Database(query) # send query to database
+        try:
+            self.database = records.Database(query) # send query to database
+        except:
+            pass
 
     def go_to_database(self):
         """
         Method that allows to go to the right database
         """
-        self.database.query("SET NAMES 'utf8mb4'")
-        self.database.query("USE {}".format(self.config["Database"]))
+        try:
+            self.database.query("SET NAMES 'utf8mb4'")
+            self.database.query("USE {}".format(self.config["Database"]))
+        except:
+            pass
 
     def find_substitute(self):
         """

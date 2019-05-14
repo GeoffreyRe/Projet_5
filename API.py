@@ -90,3 +90,7 @@ class API():
 
 if __name__ == "__main__":
     OFF = API()
+    for category in ["Laits", "Beurres", "Boissons lactées", "Fromages", "Sodas", "Boissons au thé", "Boissons énergisantes", "Céréales pour petit-déjeuner", "Pâtes à tartiner", "Confitures et marmelades", "Charcuteries", "Volailles", "Desserts au chocolat", "Compotes", "Desserts lactés", "Snacks sucrés"]:
+        OFF.find_informations(category)
+        print(OFF.products_list)
+        OFF.reset_products_list()

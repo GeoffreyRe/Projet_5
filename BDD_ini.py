@@ -89,7 +89,7 @@ class BDD_ini():
 
     def retrieve_store_dict(self):
         """
-        Method that returns a dictionnary where a key correspond to he name of a store and
+        Method that returns a dictionnary where a key correspond to the name of a store and
         its value correspond to id of this store in table 'store'.
         """
         self.dict_of_stores = {}
@@ -168,8 +168,11 @@ class BDD_ini():
         Method wich allows to fill table Product with all informations collected by API
         then processed by a ProductClassifier object.
         """
+        compteur = 0
         for sub_category in self.sub_category_list:
             for sub_cat in sub_category:
+                compteur += 1
+                print(compteur)
                 # for each product in a sub_category
                 for product in self.call_api(sub_cat):
                     product = self.find_correspondence_store(product)
@@ -223,18 +226,29 @@ class BDD_ini():
     def complete_fill(self):
         """
         Method wich gathers togheter methods in order to completely fill the database.
+        It returns True if fillig is a success or False if filling has failed.
         """
-        self.connection_and_init()
+        try:
+            self.connection_and_init()
+        except:
+            sentence = ("La connexion à la base de données a échouée, "
+                         + "vérifiez vos identifiants dans 'config.json'")
+            print(sentence)
+            input("Appuyez sur 'Enter' pour arrêter le programme")
+            return False
         if self.check_initialisation(): # if database is not already filled
+            print("La base de données se remplit, un petit instant svp...")
             self.fill_table_store()
             self.fill_table_category()
             self.fill_table_sub_category()
             self.retrieve_store_dict()
             self.fill_table_product()
-            with open("values.json", "w") as file:
+            with open("config.json", "w") as file:
                 file.write(json.dumps(self.config, ensure_ascii=False, indent=4))
         else:
-            print("The database is already filled")
+            print("La base de données est déjà remplie")
+            input("Appuyez sur 'Enter' pour être dirigé vers le menu")
+        return True
 
 if __name__ == "__main__":
     BDD = BDD_ini()

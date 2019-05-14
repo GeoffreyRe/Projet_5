@@ -26,6 +26,20 @@ class Display():
             ]
         self.bdd = database.BDD()
 
+    def welcome(self):
+        """
+        Method wich makes an "introduction" of program
+        """
+        sentences = ("Bonjour et bienvenu sur le programme de la startup 'PurBeurre'.",
+                    "Ce programme vous permet de récupérer directement les données de ",
+                    "la (gigantesque) base de données 'OpenFoodFacts'. Pour plus ",
+                    "d'informations sur l'utilisation de ce logiciel, n'hésitez pas ",
+                    "à lire le fichier 'README.md'. Bonne utilisation !",
+                    "")
+        for sentence in sentences:
+            print(sentence)
+        input("Appuyez sur 'enter' pour continuer")
+
     def menu(self):
         """
         Method wich manages travel inside menu and allows to called method wich corresponds
