@@ -3,7 +3,7 @@ Ceci est un docstring de module
 """
 import json
 import records
-class BDD():
+class Bdd():
     """
     This class has the responsibility to manage recovery of
     datas (inside database) under user's choices.

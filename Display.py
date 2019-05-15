@@ -3,7 +3,7 @@ Ceci est une docstring de module
 """
 import os
 import tablib
-import BDD as database
+import Bdd as database
 
 class Display():
     """
@@ -24,18 +24,18 @@ class Display():
             ["Charcuteries", "Volailles"],
             ["Desserts au chocolat", "Compotes", "Desserts lactés", "Snacks sucrés"]
             ]
-        self.bdd = database.BDD()
+        self.bdd = database.Bdd()
 
     def welcome(self):
         """
         Method wich makes an "introduction" of program
         """
-        sentences = ("Bonjour et bienvenu sur le programme de la startup 'PurBeurre'.",
-                    "Ce programme vous permet de récupérer directement les données de ",
-                    "la (gigantesque) base de données 'OpenFoodFacts'. Pour plus ",
-                    "d'informations sur l'utilisation de ce logiciel, n'hésitez pas ",
-                    "à lire le fichier 'README.md'. Bonne utilisation !",
-                    "")
+        sentences = ("Bonjour et bienvenue sur le programme de la startup 'PurBeurre'.",
+                     "Ce programme vous permet de récupérer directement les données de ",
+                     "la (gigantesque) base de données 'OpenFoodFacts'. Pour plus ",
+                     "d'informations sur l'utilisation de ce logiciel, n'hésitez pas ",
+                     "à lire le fichier 'README.md'. Bonne utilisation !",
+                     "")
         for sentence in sentences:
             print(sentence)
         input("Appuyez sur 'enter' pour continuer")

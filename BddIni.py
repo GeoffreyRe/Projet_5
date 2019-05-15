@@ -4,9 +4,9 @@ Ceci est une docstring de module
 import json
 import copy
 import records
-import API
+import Api as A
 
-class BDD_ini():
+class BddIni():
     """
     Class that has the responsibility to fill different tables of
     database.
@@ -32,7 +32,7 @@ class BDD_ini():
         self.config = None # is going to be initialize in method 'import_json_data()'
         self.database = None # is going to be initialize in method 'connection()'
         self.dict_of_stores = None # is going to be initialize in method 'retrieve_store_dict()'
-        self.openfoodfact = API.API()
+        self.openfoodfact = A.Api()
 
     def import_json_data(self):
         """
@@ -168,11 +168,11 @@ class BDD_ini():
         Method wich allows to fill table Product with all informations collected by API
         then processed by a ProductClassifier object.
         """
-        compteur = 0
+        counter = 0
         for sub_category in self.sub_category_list:
             for sub_cat in sub_category:
-                compteur += 1
-                print(compteur)
+                counter += 1
+                print("{} catégorie(s) télécharée(s)".format(counter))
                 # for each product in a sub_category
                 for product in self.call_api(sub_cat):
                     product = self.find_correspondence_store(product)
@@ -232,7 +232,7 @@ class BDD_ini():
             self.connection_and_init()
         except:
             sentence = ("La connexion à la base de données a échouée, "
-                         + "vérifiez vos identifiants dans 'config.json'")
+                        + "vérifiez vos identifiants dans 'config.json'")
             print(sentence)
             input("Appuyez sur 'Enter' pour arrêter le programme")
             return False
@@ -250,6 +250,3 @@ class BDD_ini():
             input("Appuyez sur 'Enter' pour être dirigé vers le menu")
         return True
 
-if __name__ == "__main__":
-    BDD = BDD_ini()
-    BDD.complete_fill()

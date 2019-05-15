@@ -4,7 +4,7 @@ Ceci est un docstring de module
 import requests # 'requests' allows to send requests to an API
 import ProductClassifier as productC
 
-class API():
+class Api():
     """
     This class has the responsibility to manage calls with API
     OpenFoodfact and to retrieve different needed informations
@@ -87,10 +87,3 @@ class API():
         wbefore we want to get products of an other category.
         """
         self.products_list = []
-
-if __name__ == "__main__":
-    OFF = API()
-    for category in ["Laits", "Beurres", "Boissons lactées", "Fromages", "Sodas", "Boissons au thé", "Boissons énergisantes", "Céréales pour petit-déjeuner", "Pâtes à tartiner", "Confitures et marmelades", "Charcuteries", "Volailles", "Desserts au chocolat", "Compotes", "Desserts lactés", "Snacks sucrés"]:
-        OFF.find_informations(category)
-        print(OFF.products_list)
-        OFF.reset_products_list()
