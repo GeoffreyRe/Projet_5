@@ -1,6 +1,7 @@
 {
     "User": "",
-    "Initialisation": 1,
+    "Initialisation": 0,
     "Pw": "",
-    "Database": ""
+    "Database": "",
+    "Command": "cls"
 }

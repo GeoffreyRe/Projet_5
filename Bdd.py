@@ -1,5 +1,6 @@
 """
-Ceci est un docstring de module
+This class has the responsibility to manage recovery of
+datas (inside database) under user's choices.
 """
 import json
 import records
@@ -121,8 +122,4 @@ class Bdd():
             print("votre enregistrement a bien été effectué")
         except:
             print("Il semblerait qu'un problème soit survenu" + ", l'enregistrement a donc échoué")
-
-if __name__ == "__main__":
-    BDD = BDD()
-    print(BDD.find_substitute())
         

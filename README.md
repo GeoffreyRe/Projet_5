@@ -24,8 +24,9 @@ Enfin l'utilisateur pourra alors intéragir avec la base de données par l'inter
   
 ### 1.3 Description du parcours utilisateur
 -------------------------------------------
-L'utilisateur est sur le terminal et lance le fichier main.py.  
-Le programme lui affiche alors les choix suivants :
+L'utilisateur est sur le terminal et lance le fichier main.py.
+Après un message d'acceuil ainsi qu'un remplissage de la base de données
+(qui peut prendre plusieurs minutes), le programme lui affiche les choix suivants :
 1. Quels aliments souhaitez-vous remplacer ?
 2. Retrouvez mes aliments substitués
 3. Quittez le programme 
@@ -131,28 +132,41 @@ contenant les tables du projet.
 Exemple: "User" : "Utilisateur1"  
   
 - "Initialisation" = paramètre qui permet de savoir si la base de données est déjà remplie ou non.  
-Ce paramètre ne doit pas être modifié.  
-  
+Ce paramètre doit valoir 0 si la base n'a pas encore été remplie et 1 si la base de données a déjà 
+été remplie.
+Ce paramètre se modifie tout seul de 0 à 1 lors du remplissage de la base à la première utilisation.
+
 - "Pw" = Le mot de passe associé à l'utilisateur MySQL fourni dans "User".  
 Exemple: "Pw" : "Mon_mot_de_passe"  
   
 - "Database" = La base de données MySQL dans laquelle les tables ont été créées.  
-Exemple: "Database" : "Projet_5"  
+Exemple: "Database" : "Projet_5" 
+
+- "Command" = La commande de votre système d'exploitation qui permet "d'effacer" l'affichage du texte
+qui est inscrit dans le terminal. Sous windows la commande est "cls", sous Unix (linux, ...) la commande
+est "clear",...
+la valeur par défaut est "cls"
+Exemple : - pour les utilisateurs Windows : "Command" : "cls"
+          - pour les utilisateurs linux : "Command" : "clear" 
   
 ## 3. Structure du projet
 -------------------------
 Il est à noter que le code associé au projet respecte la PEP8  
 Le projet est subdivisé en différents fichiers:  
-- API.py
+- Api.py
 - ProductClassifier.py
-- BDD.py
-- BDD_ini.py
+- Bdd.py
+- BddIni.py
 - Display.py
-- Main.py  
+- Launch.py 
+- Main.py 
+- config.json 
+- dtb_project_5_save.sql
+- requirements.txt
   
 Chaque fichier contient une seule classe, du même nom que le fichier
 
-### 3.1. API.py
+### 3.1. Api.py
 ---------------
 Cette classe a la responsabilité de gérer les appels avec l'API 
 "OpenFoodFacts" ainsi que de récupérer, grâce à cette API, les informations
@@ -164,12 +178,12 @@ Cette classe a la responsabilité d'analyser et de traiter les informations
 des produits récupérés depuis l'API. Par exemple, cette classe permet de vérifier
 la pertinence des magasins associés à chaque produit, etc...
 
-### 3.3. BDD.py
+### 3.3. Bdd.py
 ---------------
 Cette classe a la responsabilité de récupérer les informations stockées dans
 la base de données associée au projet.
 
-### 3.4. BDD_ini.py
+### 3.4. BddIni.py
 -------------------
 Cette classe a la responsabilité d'insérer les différentes données dans les tables
 de la base de données associée au projet.
@@ -178,6 +192,28 @@ de la base de données associée au projet.
 -------------------
 Cette classe a la responsabilité de gérer l'affichage du menu et la navigation de l'utilisateur
 au sein de ce dernier.
+
+### 3.6. Launch.py
+------------------
+Cette petite classe a la responsabilité de gérer le lancement du programme
+
+### 3.7. Main.py
+----------------
+Ce fichier est le fichier sur lequel il faut cliquer pour lancer le programme
+
+### 3.8. config.json
+-------------------
+Ce fichier contient des informations indispensables pour le bon fonctionnement du programme
+
+### 3.9. dtb_project_5_save.sql
+------------------------------
+Ce fichier au format .sql contient la sauvegarde de la structure de la base de données.
+Celui ci permet de créer les différentes tables de la base de données.
+
+### 3.10. requirements.txt
+--------------------------
+Ce fichier contient les différents packages python nécessaires au projet. 
+Il faut installer tous ces packages, sans quoi le programme ne peut fonctionner.
 
 ## 4. Informations complémentaires
 ----------------------------------

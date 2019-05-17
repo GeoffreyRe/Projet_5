@@ -1,7 +1,9 @@
 """
-Ceci est une docstring de module
+This class has the responsibility to manage display of menu
+and navigation inside menu.
 """
 import os
+import json
 import tablib
 import Bdd as database
 
@@ -25,11 +27,22 @@ class Display():
             ["Desserts au chocolat", "Compotes", "Desserts lactés", "Snacks sucrés"]
             ]
         self.bdd = database.Bdd()
+        self.command = None # this attribute will be initialized in 'import_json_data' method
+
+    def import_json_data(self):
+        """
+        Method that imports datas contained into json file
+        """
+        # we use method of module json
+        with open("config.json", "r") as file:
+            config = json.load(file)
+            self.command = config["Command"]
 
     def welcome(self):
         """
         Method wich makes an "introduction" of program
         """
+        self.import_json_data()
         sentences = ("Bonjour et bienvenue sur le programme de la startup 'PurBeurre'.",
                      "Ce programme vous permet de récupérer directement les données de ",
                      "la (gigantesque) base de données 'OpenFoodFacts'. Pour plus ",
@@ -50,7 +63,7 @@ class Display():
                           self.products_menu, self.user_menu]
         launched = True
         while launched:
-            os.system("cls")
+            os.system(self.command)
             # needed parameters for each function
             parameters_list = [[index], [index], [index, intern_index],
                                [index, name, intern_index], []]
@@ -200,7 +213,7 @@ class Display():
         # we will displays a 'summary' of each product
         headers_list = ["Touche", "Nom produit", "Marque", "Score"]
         while True:
-            os.system("cls")
+            os.system(self.command)
             print("Tableau Produits:\n", " ")
             answer = self.create_tablib(products_list, headers_list)
             if answer == -1: # we go back to sub-category menu
@@ -234,7 +247,7 @@ class Display():
         substitute_list = self.bdd.find_products(name, value[1])
         headers_list = ["Touche", "Nom produit", "Marque", "Score"]
         while True:
-            os.system("cls")
+            os.system(self.command)
             print("Tableau Substituts:\n", " ")
             answer = self.create_tablib(substitute_list, headers_list)
             if answer == -1:
@@ -279,7 +292,7 @@ class Display():
         headers_list = ["Touche", "Nom produit", "Nutriscore produit",
                         "Nom substitut", "Nutriscore substitut"]
         while True:
-            os.system("cls")
+            os.system(self.command)
             answer = self.create_tablib_user(prod_sub_list, headers_list)
             if answer == -1:
                 break # we go back to first menu
@@ -353,9 +366,3 @@ class Display():
 
         input("Appuyez sur entrée :")
 
-
-
-
-if __name__ == "__main__":
-    DISPLAY = Display()
-    DISPLAY.menu()

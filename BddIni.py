@@ -1,5 +1,6 @@
 """
-Ceci est une docstring de module
+Class that has the responsibility to fill different tables of
+database.
 """
 import json
 import copy
@@ -163,12 +164,13 @@ class BddIni():
         for store in stores_product:
             query = "INSERT INTO Assoc_product_store VALUES ({},{})".format(barcode_product, store)
             self.database.query(query)
+
     def fill_table_product(self):
         """
         Method wich allows to fill table Product with all informations collected by API
         then processed by a ProductClassifier object.
         """
-        counter = 0
+        counter = 0 # counter of sub_categories wich have been append to bdd.
         for sub_category in self.sub_category_list:
             for sub_cat in sub_category:
                 counter += 1
@@ -176,44 +178,22 @@ class BddIni():
                 # for each product in a sub_category
                 for product in self.call_api(sub_cat):
                     product = self.find_correspondence_store(product)
-                    list_variables = ["a", "b", "c", "d", "e", "f"]
-                    list_value = ["_id", "product_name", "brands", "url",
-                                  "nutrition_grades", "nutriments"]
-                    for i, var in enumerate(list_variables):
-                        locals()[var] = self.add_single_string(product\
-                        [self.openfoodfact.variables_list.index(list_value[i])])
-                    g = self.database.query("SELECT id FROM Sub_category\
+                    list_value = [] # list of values of one product
+                    for index in [0, 2, 5, 3, 1, 6]: # index of each information we need
+                        value = self.add_single_string(product[index])
+                        list_value.append(value)
+                    value = self.database.query("SELECT id FROM Sub_category\
                     WHERE name={}".format(self.add_single_string(sub_cat)))
-                    g = g.all(as_dict=True)[0]["id"]
+                    value = value.all(as_dict=True)[0]["id"] # we find id of sub_cat in bdd
+                    list_value.append(value)
                     query = "INSERT INTO product VALUES({},{},{},\
-                    {},{},{},{})".format(locals()["a"], locals()["b"], locals()["c"],\
-                    locals()["d"], locals()["e"], locals()["f"], g).replace("\n", "")
+                    {},{},{},{})".format(*list_value).replace("\n", "")
                     try:
-                        self.database.query(query)
-                        self.fill_table_assoc(product)
+                        self.database.query(query) # we insert the product
+                        self.fill_table_assoc(product) # we fill table Assoc
                     except:
-                        pass
-
-        """
-        for sub_category in self.sub_category_list:
-            for sub_cat in sub_category:
-                # for each product in a sub_category
-                for product in self.call_api(sub_cat):
-                    product = self.find_correspondence_store(product)
-                    liste = []
-                    for i in [0,2,5,3,1,6]:
-                        liste.append(self.add_single_string(product[i]))
-                    query_1 = "SELECT id FROM Sub_category WHERE name={}"
-                    value = self.database.query(query_1).format(self.add_single_string(sub_cat)))
-                    liste.append(value.all(as_dict=True)[0]["id"])
-                    query = "INSERT INTO product VALUES({},{},{},\
-                    {},{},{},{})".format(*liste).replace("\n", "")
-                    try:
-                        self.database.query(query)
-                        self.fill_table_assoc(product)
-                    except:
-                        pass
-        """
+                        pass # if there is a problem (primary key constraint,...)
+                             # we don't add the product
 
     def connection_and_init(self):
         """
@@ -249,4 +229,3 @@ class BddIni():
             print("La base de données est déjà remplie")
             input("Appuyez sur 'Enter' pour être dirigé vers le menu")
         return True
-

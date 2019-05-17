@@ -1,5 +1,5 @@
 """
-Ceci est un module de docstring
+This class has the responsibility to manage the launching of program
 """
 import Display as D
 import BddIni as B

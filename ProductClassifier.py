@@ -1,5 +1,5 @@
 """
-Ceci est une docstring de module
+Class that will verify values from Openfoodfacts API
 """
 class ProductClassifier():
     """ Class that will verify values from Openfoodfacts API"""
