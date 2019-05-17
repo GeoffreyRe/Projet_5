@@ -124,4 +124,3 @@ class Bdd():
             print("Il semblerait qu'un problème soit survenu" + ", l'enregistrement a donc échoué")
 
         input("Appuyez sur 'enter' pour continuer: ")
-        
