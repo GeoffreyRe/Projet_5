@@ -17,7 +17,7 @@ projet_5 : Utilisez les données publiques de l'OpenFoodFacts
 Le but de ce projet est de créer un programme qui interagirait avec la base Open Food Facts
 pour en récupérer les aliments, les comparer et proposer à l'utilisateur un substitut
 plus sain à l'aliment qui lui fait envie.  
-Plus concrètement, le programme devra pouvoirrécupérer un ensemble de produits grâce à l'API
+Plus concrètement, le programme devra pouvoir récupérer un ensemble de produits grâce à l'API
 OpenFoodFact. Ensuite, ce programme sera capable d'insérer un ensemble d'informations au sein
 d'une base de données (crée spécialement pour le projet).  
 Enfin l'utilisateur pourra alors intéragir avec la base de données par l'intermédiaire du programme. 
