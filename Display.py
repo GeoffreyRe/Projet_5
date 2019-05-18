@@ -14,7 +14,7 @@ class Display():
     """
     def __init__(self):
         self.first_menu_list = ["Quels aliments souhaitez-vous remplacer ?",
-                                "Retrouvez mes aliments substitués.",
+                                "Retrouver mes aliments substitués.",
                                 "Quitter le programme."]
 
         self.category_list = ["Produits laitiers", "Boissons", "Petit-déjeuners",
