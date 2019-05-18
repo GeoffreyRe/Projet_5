@@ -236,6 +236,7 @@ class Display():
             self.bdd.record_table_user(value_product, value_substitute)
         else: # if answer is no (=False)
             print("Vous allez être redirigé vers le menu")
+            input("Appuyez sur 'enter' pour continuer: ")
 
     def substitute(self, index, name, products_list, value):
         """
