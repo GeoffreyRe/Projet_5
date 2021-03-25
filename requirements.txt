@@ -10,7 +10,7 @@ mysql-connector-python==8.0.16
 odfpy==1.4.0
 openpyxl==2.4.11
 protobuf==3.7.1
-PyYAML==5.1
+PyYAML==5.4
 records==0.5.3
 requests==2.22.0
 six==1.12.0
