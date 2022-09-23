@@ -9,7 +9,7 @@ jdcal==1.4.1
 mysql-connector-python==8.0.16
 odfpy==1.4.0
 openpyxl==2.4.11
-protobuf==3.7.1
+protobuf==3.18.3
 PyYAML==5.1
 records==0.5.3
 requests==2.22.0
